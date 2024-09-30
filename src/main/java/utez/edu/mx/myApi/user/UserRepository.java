@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
     User findById(long id);
+    User save(User user);
+    void deleteById(long id);
 }
