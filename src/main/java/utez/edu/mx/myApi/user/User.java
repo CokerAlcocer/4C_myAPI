@@ -1,6 +1,7 @@
 package utez.edu.mx.myApi.user;
 
 import jakarta.persistence.*;
+import utez.edu.mx.myApi.department.Department;
 
 @Entity
 @Table(name = "user")
@@ -19,6 +20,10 @@ public class User {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
+    @ManyToOne
+    @JoinColumn(name = "id_department", nullable = false)
+    private Department department;
+
     public User() {
     }
 
@@ -33,6 +38,14 @@ public class User {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
+    }
+
+    public User(long id, String username, String password, String fullName, Department department) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.department = department;
     }
 
     public long getId() {
@@ -65,5 +78,13 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }
