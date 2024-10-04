@@ -37,7 +37,7 @@
     <main class="m-5">
         <section class="d-flex align-items-center">
             <h3 class="m-0">Gestión de mascotas</h3>
-            <button class="btn btn-outline-success ms-auto" type="button" data-bs-target="#saveModal" data-bs-toggle="modal">Nuevo registro</button>
+            <button class="btn btn-outline-success ms-auto" type="button" onclick="loadData()" data-bs-target="#saveModal" data-bs-toggle="modal">Nuevo registro</button>
         </section>
         <hr>
         <section>
@@ -46,29 +46,14 @@
                     <thead>
                         <tr class="table-dark">
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Apodo de la mascota</th>
+                            <th scope="col">Dueño</th>
+                            <th scope="col">Raza</th>
+                            <th scope="col" class="text-center">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
+                    <tbody id="tbody">
+
                     </tbody>
                 </table>
             </div>
@@ -84,20 +69,22 @@
                     <hr>
                     <form class="row g-3">
                         <div class="col-12">
-                            <label for=""><small>Nombre completo</small></label>
-                            <input type="text" class="form-control">
+                            <label for="nickame"><small>Apodo de la mascota</small></label>
+                            <input type="text" id="nickname" name="nickname" class="form-control">
                         </div>
                         <div class="col-12">
-                            <label for=""><small>Correo electrónico</small></label>
-                            <input type="text" class="form-control">
+                            <label for="ownerList"><small>Dueño</small></label>
+                            <select name="ownerList" id="ownerList" class="form-select">
+                                
+                            </select>
                         </div>
                         <div class="col-12">
-                            <label for=""><small>Departamento</small></label>
-                            <select name="" id="" class="form-select"></select>
+                            <label for="typeList"><small>Raza</small></label>
+                            <select name="typeList" id="typeList" class="form-select"></select>
                         </div>
                         <div class="col-12 text-end">
-                            <button class="btn btn-outline-secondary">Cerrar</button>
-                            <button class="btn btn-outline-success ms-2">Registrar</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-outline-success ms-2" onclick="savePet()">Registrar</button>
                         </div>
                     </form>
                 </div>
