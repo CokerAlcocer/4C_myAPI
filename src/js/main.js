@@ -17,7 +17,7 @@ const findAllPets = async () => {
     }).catch(console.log);
 }
 
-(async () => {
+const loadTable = async () => {
     await findAllPets();
 
     let tbody = document.getElementById('tbody');
@@ -29,12 +29,16 @@ const findAllPets = async () => {
                         <td>${item.owner.fullName}</td>
                         <td>${item.type.name}</td>
                         <td class="text-center">
-                            <button class="btn btn-outline-danger">Eliminar</button>
-                            <button class="btn btn-outline-primary">Editar</button>
+                            <button class="btn btn-outline-danger" onclick="findPetById(${item.id})" data-bs-target="#deleteModal" data-bs-toggle="modal">Eliminar</button>
+                            <button class="btn btn-outline-primary" onclick="loadPet(${item.id})" data-bs-target="#updateModal" data-bs-toggle="modal">Editar</button>
                         </td>
                     </tr>`;
     });
     tbody.innerHTML = content;
+}
+
+(async () => {
+    await loadTable();
 })();
 
 const findAllOwners = async () => {
@@ -70,9 +74,14 @@ const loadData = async () => {
     let ownerSelect = document.getElementById('ownerList');
     let typeSelect = document.getElementById('typeList');
     let content = '';
-    ownerList.forEach(item => {
-        content += `<option value="${item.id}">${item.fullName}</option>`;
-    });
+
+    if(ownerList.length === 0) {
+        content += `<option selected disabled>No hay gente para adoptar</option>`;
+    } else {
+        ownerList.forEach(item => {
+            content += `<option value="${item.id}">${item.fullName}</option>`;
+        });
+    }
     ownerSelect.innerHTML = content;
 
     content = '';
@@ -82,7 +91,36 @@ const loadData = async () => {
     typeSelect.innerHTML = content;
 }
 
+const findPetById = async id => {
+    await fetch(`${URL}/api/pet/${id}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+    }).then(response => response.json()).then(response => {
+        console.log(response);
+        pet = response.data;
+    }).catch(console.log);
+}
+
+const loadPet = async id => {
+    await findPetById(id);
+    await findAllTypes();
+    let select = document.getElementById('u_typeList');
+    content = '';
+    typeList.forEach(item => {
+        content += `<option value="${item.id}">${item.name}</option>`;
+    });
+    select.innerHTML = content;
+
+    document.getElementById('u_nickname').value = pet.nickname;
+    document.getElementById('u_ownerList').value = pet.owner.fullName;
+    select.value = pet.type.id;
+}
+
 const savePet = async () => {
+    let form = document.getElementById('saveForm');    
     pet = {
         nickname: document.getElementById('nickname').value,
         owner: {
@@ -100,8 +138,51 @@ const savePet = async () => {
             "Accept": "application/json"
         },
         body: JSON.stringify(pet)
-    }).then(response => response.json()).then(response => {
+    }).then(response => response.json()).then(async response => {
         console.log(response);
         pet = {};
+        await loadTable();
+        form.reset();
+    }).catch(console.log);
+}
+
+const updatePet = async () => {
+    let form = document.getElementById('updateForm');    
+    let updated = {
+        nickname: document.getElementById('u_nickname').value,
+        owner: pet.owner,
+        type: {
+            id: document.getElementById('u_typeList').value
+        }
+    };
+
+    await fetch(`${URL}/api/pet/${pet.id}`, {
+        method: 'PUT',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(updated)
+    }).then(response => response.json()).then(async response => {
+        console.log(response);
+        pet = {};
+        await loadTable();
+        form.reset();
+    }).catch(console.log);
+}
+
+const deletePet = async () => {
+    console.log(pet);
+    
+    await fetch(`${URL}/api/pet/${pet.id}`, {
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+    }).then(response => response.json()).then(async response => {
+        console.log(response);
+        pet = {};
+        await loadTable();
     }).catch(console.log);
 }

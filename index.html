@@ -67,7 +67,7 @@
                 <div class="modal-body">
                     <h4>Nuevo registro</h4>
                     <hr>
-                    <form class="row g-3">
+                    <form id="saveForm" class="row g-3">
                         <div class="col-12">
                             <label for="nickame"><small>Apodo de la mascota</small></label>
                             <input type="text" id="nickname" name="nickname" class="form-control">
@@ -83,10 +83,61 @@
                             <select name="typeList" id="typeList" class="form-select"></select>
                         </div>
                         <div class="col-12 text-end">
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-outline-success ms-2" onclick="savePet()">Registrar</button>
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-outline-success ms-1" onclick="savePet()" data-bs-dismiss="modal">Registrar</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de actualización -->
+    <div class="modal fade" id="updateModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4>Actualizar datos de la mascota</h4>
+                    <hr>
+                    <form id="updateForm" class="row g-3">
+                        <div class="col-12">
+                            <label for="u_nickame"><small>Apodo de la mascota</small></label>
+                            <input type="text" id="u_nickname" name="u_nickname" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label for="u_ownerList"><small>Dueño</small></label>
+                            <input name="u_ownerList" id="u_ownerList" class="form-control" disabled>
+                        </div>
+                        <div class="col-12">
+                            <label for="u_typeList"><small>Raza</small></label>
+                            <select name="u_typeList" id="u_typeList" class="form-select"></select>
+                        </div>
+                        <div class="col-12 text-end">
+                            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-outline-primary ms-1" onclick="updatePet()" data-bs-dismiss="modal">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de eliminación -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4>AVISO</h4>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>¿Seguro que desea realizar la operación?</p>
+                        </div>
+                        <div class="col-12 mt-3 text-end">
+                            <button type="button" class="btn btn-outline-danger ms-1" onclick="deletePet()" data-bs-dismiss="modal">Eliminar</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
