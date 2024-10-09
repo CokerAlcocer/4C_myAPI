@@ -1,14 +1,14 @@
-package utez.edu.mx.myApi.department;
+package utez.edu.mx.myApi.ejercicio1.building;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import utez.edu.mx.myApi.user.User;
+import utez.edu.mx.myApi.ejercicio1.pet.Pet;
 
 import java.util.List;
 
 @Entity
-@Table(name = "department")
-public class Department {
+@Table(name = "building")
+public class Building {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -17,31 +17,31 @@ public class Department {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "department")
+    @ManyToMany(mappedBy = "buildings")
     @JsonIgnore
-    private List<User> users;
+    private List<Pet> pets;
 
-    public Department() {
+    public Building() {
     }
 
-    public Department(String name) {
+    public Building(String name) {
         this.name = name;
     }
 
-    public Department(long id, String name) {
+    public Building(long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Department(String name, List<User> users) {
+    public Building(String name, List<Pet> pets) {
         this.name = name;
-        this.users = users;
+        this.pets = pets;
     }
 
-    public Department(long id, String name, List<User> users) {
+    public Building(long id, String name, List<Pet> pets) {
         this.id = id;
         this.name = name;
-        this.users = users;
+        this.pets = pets;
     }
 
     public long getId() {
@@ -60,11 +60,11 @@ public class Department {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<Pet> getPets() {
+        return pets;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
     }
 }

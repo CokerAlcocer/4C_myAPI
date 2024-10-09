@@ -1,7 +1,7 @@
-package utez.edu.mx.myApi.user;
+package utez.edu.mx.myApi.test.user;
 
 import jakarta.persistence.*;
-import utez.edu.mx.myApi.department.Department;
+import utez.edu.mx.myApi.test.department.Department;
 
 @Entity
 @Table(name = "user")

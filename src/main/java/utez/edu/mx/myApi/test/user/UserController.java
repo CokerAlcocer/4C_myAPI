@@ -1,4 +1,4 @@
-package utez.edu.mx.myApi.user;
+package utez.edu.mx.myApi.test.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

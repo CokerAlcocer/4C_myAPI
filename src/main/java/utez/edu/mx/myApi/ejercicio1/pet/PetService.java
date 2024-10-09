@@ -1,4 +1,4 @@
-package utez.edu.mx.myApi.user;
+package utez.edu.mx.myApi.ejercicio1.pet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,17 +12,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class PetService {
     @Autowired
-    private UserRepository userRepository;
+    private PetRepository petRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<?> findAll() {
         Map<String, Object> body = new HashMap<>();
-        List<User> list = userRepository.findAll();
+        List<Pet> list = petRepository.findAll();
 
         body.put("message", list.isEmpty() ? "Aún no hay registros" : "Operación exitosa");
-        body.put("status", 200);
+        body.put("code", 200);
+        body.put("status", "OK");
         body.put("data", list);
 
         return new ResponseEntity<>(body, HttpStatus.OK);
@@ -31,79 +32,95 @@ public class UserService {
     @Transactional(readOnly = true)
     public ResponseEntity<?> findById(long id) {
         Map<String, Object> body = new HashMap<>();
-        User found = userRepository.findById(id);
+        Pet found = petRepository.findById(id);
 
-        body.put("message", found == null ? "Registro no encontrado" : "Operación exitosa");
-        body.put("status", found == null ? 404 : 200);
+        body.put("message", found == null ? "El registro no existe" : "Operación exitosa");
+        body.put("code", found == null ? 404 : 200);
+        body.put("status", found == null ? "NOT_FOUND" : "OK");
         body.put("data", found);
 
         return new ResponseEntity<>(body, found == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = {SQLException.class, Exception.class})
-    public ResponseEntity<?> save(User user) {
+    public ResponseEntity<?> save(Pet p) {
         Map<String, Object> body = new HashMap<>();
-        User saved = null;
+        Pet saved = null;
 
         try {
-            saved = userRepository.save(user);
+             saved = petRepository.save(p);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
 
-        body.put("message", saved != null ? "Registro realizado exitosamente" : "Error en el registro");
-        body.put("status", saved != null ? 201 : 400);
+        body.put("message", saved != null ? "Operación exitosa" : "El registro no se completó");
+        body.put("code", saved != null ? 201 : 400);
+        body.put("status", saved != null ? "OK" : "BAD_REQUEST");
+        body.put("data", saved != null ? saved.getId() : null);
+
         return new ResponseEntity<>(body, saved != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @Transactional(rollbackFor = {SQLException.class, Exception.class})
-    public ResponseEntity<?> update(User user, long id) {
+    public ResponseEntity<?> update(long id, Pet p) {
         Map<String, Object> body = new HashMap<>();
-        User updated = null;
+        Pet updated = null;
 
-        if(userRepository.findById(id) != null) {
-            user.setId(id);
+        if(petRepository.findById(id) != null) {
+            p.setId(id);
             try {
-                updated = userRepository.save(user);
+                updated = petRepository.save(p);
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
             }
 
-            body.put("message", updated != null ? "Actualización realizada exitosamente" : "Error en la catualización");
-            body.put("status", updated != null ? 201 : 400);
+            body.put("message", updated != null ? "Operación exitosa" : "La actualización no se completó");
+            body.put("code", updated != null ? 201 : 400);
+            body.put("status", updated != null ? "OK" : "BAD_REQUEST");
+            body.put("data", updated != null ? updated.getId() : null);
+
             return new ResponseEntity<>(body, updated != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
         } else {
             body.put("message", "El registro no existe");
-            body.put("status", 404);
+            body.put("code", 404);
+            body.put("status", "NOT_FOUND");
+            body.put("data", null);
+
             return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         }
     }
 
     @Transactional(rollbackFor = {SQLException.class, Exception.class})
-    public ResponseEntity<?> delete(long id) {
+    public ResponseEntity<?> deleteById(long id) {
         Map<String, Object> body = new HashMap<>();
+        HttpStatus status = null;
 
-        if(userRepository.findById(id) != null) {
+        if(petRepository.findById(id) != null) {
             try {
-                userRepository.deleteById(id);
+                petRepository.deleteById(id);
 
-                body.put("message", "Eliminación realizada exitosamente");
-                body.put("status", 200);
-                return new ResponseEntity<>(body, HttpStatus.OK);
+                body.put("message", "Operación exitosa");
+                body.put("code", 200);
+                body.put("status", "OK");
+                status = HttpStatus.OK;
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
 
-                body.put("message", "Error en la eliminación");
-                body.put("status", 400);
-                return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+                body.put("message", "La eliminación no se completó");
+                body.put("code", 400);
+                body.put("status", "BAD_REQUEST");
+                status = HttpStatus.BAD_REQUEST;
             }
         } else {
             body.put("message", "El registro no existe");
-            body.put("status", 404);
-            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+            body.put("code", 404);
+            body.put("status", "NOT_FOUND");
+            status = HttpStatus.BAD_REQUEST;
         }
+
+        return new ResponseEntity<>(body, status);
     }
 }
